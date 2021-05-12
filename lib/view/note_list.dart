@@ -1,8 +1,7 @@
 import 'package:aula09_2021/logic/manage_db/manage_db_event.dart';
 import 'package:aula09_2021/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:aula09_2021/logic/monitor_db/monitor_db_state.dart';
-import 'package:aula09_2021/logic/monitor_db/montior_db_bloc.dart';
-import 'package:aula09_2021/model/note.dart';
+import 'package:aula09_2021/logic/monitor_db/monitor_db_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
