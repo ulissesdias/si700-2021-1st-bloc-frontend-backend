@@ -50,7 +50,7 @@ class DatabaseLocalServer {
   }
 
   // QUERY: retorna tudo o que tem no banco.
-  getNoteList() async {
+  Future<List<dynamic>> getNoteList() async {
     Database db = await this.database;
     var noteMapList = await db.rawQuery("SELECT * FROM $noteTable");
 
@@ -113,9 +113,4 @@ class DatabaseLocalServer {
   }
 
   static StreamController _controller;
-}
-
-main() {
-  var response = DatabaseLocalServer.helper.getNoteList();
-  print(response[1]);
 }
