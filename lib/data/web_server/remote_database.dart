@@ -13,7 +13,8 @@ class DatabaseRemoteServer {
   static DatabaseRemoteServer helper = DatabaseRemoteServer._createInstance();
   DatabaseRemoteServer._createInstance();
 
-  String databaseUrl = "http://192.168.15.14:3000/notes";
+  //String databaseUrl = "http://192.168.15.14:3000/notes";
+  String databaseUrl = "https://si700.herokuapp.com/notes";
 
   Dio _dio = Dio();
 
@@ -74,7 +75,8 @@ class DatabaseRemoteServer {
       _controller = StreamController();
 
       Socket socket = io(
-          "http://192.168.15.14:3000",
+          //http://192.168.15.14:3000",
+          "https://si700.herokuapp.com/",
           OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
               .build());
       socket.on('invalidate', (_) => notify());
