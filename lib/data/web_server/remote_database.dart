@@ -1,7 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:aula09_2021/model/note.dart';
 import 'package:dio/dio.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class DatabaseRemoteServer {
   /* 
@@ -55,6 +58,38 @@ class DatabaseRemoteServer {
         }));
     return 1;
   }
+
+  /*
+    STREAM
+  */
+  notify() async {
+    if (_controller != null) {
+      var response = await getNoteList();
+      _controller.sink.add(response);
+    }
+  }
+
+  Stream get stream {
+    if (_controller == null) {
+      _controller = StreamController();
+
+      Socket socket = io(
+          "http://192.168.15.14:3000",
+          OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
+              .build());
+      socket.on('invalidate', (_) => notify());
+    }
+    return _controller.stream.asBroadcastStream();
+  }
+
+  dispose() {
+    if (!_controller.hasListener) {
+      _controller.close();
+      _controller = null;
+    }
+  }
+
+  static StreamController _controller;
 }
 
 void main() async {
