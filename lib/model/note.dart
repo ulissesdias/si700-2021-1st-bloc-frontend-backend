@@ -9,7 +9,7 @@ class Note {
       1 = local
       2 = internet
     */
-    _dataLocation = 1;
+    _dataLocation = 0;
     _title = "";
     _description = "";
   }
