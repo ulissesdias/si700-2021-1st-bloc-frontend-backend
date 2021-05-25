@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.si700_2021_1st_bloc_frontend_backend">
-   <application
+   <application  android:usesCleartextTraffic="true"
         android:label="si700_2021_1st_bloc_frontend_backend"
         android:icon="@mipmap/ic_launcher">
         <activity
