@@ -1,4 +1,7 @@
+import 'package:aula09_2021/logic/manage_auth/auth_bloc.dart';
+import 'package:aula09_2021/logic/manage_auth/auth_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SignIn extends StatefulWidget {
   @override
@@ -41,7 +44,12 @@ class _SignInState extends State<SignIn> {
               onSaved: (String inValue) {},
               decoration:
                   InputDecoration(hintText: "Password", labelText: "Password")),
-          ElevatedButton(onPressed: () {}, child: Text("SignIn!"))
+          ElevatedButton(onPressed: () {}, child: Text("SignIn!")),
+          ElevatedButton(
+              onPressed: () {
+                BlocProvider.of<AuthBloc>(context).add(LoginAnonymousUser());
+              },
+              child: Text("SignInAnônimo!"))
         ]));
   }
 }

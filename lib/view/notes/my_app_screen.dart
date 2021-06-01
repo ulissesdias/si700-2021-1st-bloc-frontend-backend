@@ -1,3 +1,5 @@
+import 'package:aula09_2021/logic/manage_auth/auth_bloc.dart';
+import 'package:aula09_2021/logic/manage_auth/auth_event.dart';
 import 'package:aula09_2021/logic/manage_db/manage_db_state.dart';
 import 'package:aula09_2021/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:aula09_2021/logic/manage_db/manage_remote_db_bloc.dart';
@@ -68,6 +70,15 @@ class _MyAppState extends State<MyApp> {
             ),
             appBar: AppBar(
               title: Text("Minhas Anotações"),
+              actions: [
+                TextButton.icon(
+                    style: TextButton.styleFrom(primary: Colors.white),
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      BlocProvider.of<AuthBloc>(context).add(Logout());
+                    },
+                    label: Text("Logout"))
+              ],
             ),
           ),
         ),
