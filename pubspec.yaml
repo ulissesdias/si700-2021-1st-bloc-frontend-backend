@@ -35,6 +35,11 @@ dependencies:
   dio: ^4.0.0
   socket_io_client: 2.0.0-beta.4-nullsafety.0
 
+  ## Firebase
+  firebase_core: ^1.2.0
+  firebase_auth: ^1.2.0
+  cloud_firestore: ^2.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
