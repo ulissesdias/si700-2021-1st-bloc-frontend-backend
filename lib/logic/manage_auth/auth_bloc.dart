@@ -21,25 +21,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   @override
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
-    if (event == null) {
-      yield Unauthenticated();
-    }
-    if (event is RegisterUser) {
-      _authenticationService.createUserWithEmailAndPassword(
-          email: event.username, password: event.password);
-    } else if (event is LoginAnonymousUser) {
-      _authenticationService.signInAnonimo();
-    } else if (event is LoginUser) {
-      _authenticationService.signInWithEmailAndPassword(
-          email: event.username, password: event.password);
-    } else if (event is InnerServerEvent) {
-      if (event.userModel == null) {
+    try {
+      if (event == null) {
         yield Unauthenticated();
-      } else {
-        yield Authenticated(user: event.userModel);
+      } else if (event is RegisterUser) {
+        await _authenticationService.createUserWithEmailAndPassword(
+            email: event.username, password: event.password);
+      } else if (event is LoginAnonymousUser) {
+        await _authenticationService.signInAnonimo();
+      } else if (event is LoginUser) {
+        await _authenticationService.signInWithEmailAndPassword(
+            email: event.username, password: event.password);
+      } else if (event is InnerServerEvent) {
+        if (event.userModel == null) {
+          yield Unauthenticated();
+        } else {
+          yield Authenticated(user: event.userModel);
+        }
+      } else if (event is Logout) {
+        await _authenticationService.signOut();
       }
-    } else if (event is Logout) {
-      _authenticationService.signOut();
+    } catch (e) {
+      yield AuthError(message: e.toString());
     }
   }
 }

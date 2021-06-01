@@ -36,10 +36,10 @@ class _RegisterState extends State<Register> {
                   hintText: "none@none.com",
                   labelText: "Username (eMail address)")),
           TextFormField(
-              initialValue: "a",
+              initialValue: "",
               obscureText: true,
               validator: (String inValue) {
-                if (inValue.length < 10) {
+                if (inValue.length < 1) {
                   return "Password must be >=10 in length";
                 }
                 return null;
