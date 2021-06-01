@@ -3,8 +3,7 @@ import 'package:aula09_2021/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:aula09_2021/logic/manage_db/manage_remote_db_bloc.dart';
 import 'package:aula09_2021/logic/monitor_db/monitor_db_bloc.dart';
 import 'package:aula09_2021/view/note_list.dart';
-import 'package:aula09_2021/view/notes_local_db_entry.dart';
-import 'package:aula09_2021/view/notes_remote_db_entry.dart';
+import 'package:aula09_2021/view/notes_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -20,7 +19,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _currentPage = 0;
 
-  var _pages = [NoteList(), NotesEntry(), NotesRemoteEntry()];
+  var _pages = [
+    NoteList(),
+    NotesEntry<ManageLocalBloc>(),
+    NotesEntry<ManageRemoteBloc>()
+  ];
 
   @override
   Widget build(BuildContext context) {
