@@ -1,4 +1,7 @@
+import 'package:aula09_2021/logic/manage_auth/auth_bloc.dart';
+import 'package:aula09_2021/logic/manage_auth/auth_event.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class _RegisterState extends State<Register> {
 
   Widget registerFormulario() {
     final GlobalKey<FormState> formKey = new GlobalKey();
+    final RegisterUser registerData = new RegisterUser();
     return Form(
         key: formKey,
         child: Column(children: [
@@ -25,7 +29,9 @@ class _RegisterState extends State<Register> {
                 }
                 return null;
               },
-              onSaved: (String inValue) {},
+              onSaved: (String inValue) {
+                registerData.username = inValue;
+              },
               decoration: InputDecoration(
                   hintText: "none@none.com",
                   labelText: "Username (eMail address)")),
@@ -38,10 +44,19 @@ class _RegisterState extends State<Register> {
                 }
                 return null;
               },
-              onSaved: (String inValue) {},
+              onSaved: (String inValue) {
+                registerData.password = inValue;
+              },
               decoration:
                   InputDecoration(hintText: "Password", labelText: "Password")),
-          ElevatedButton(onPressed: () {}, child: Text("Register!"))
+          ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState.validate()) {
+                  formKey.currentState.save();
+                  BlocProvider.of<AuthBloc>(context).add(registerData);
+                }
+              },
+              child: Text("Register!"))
         ]));
   }
 }

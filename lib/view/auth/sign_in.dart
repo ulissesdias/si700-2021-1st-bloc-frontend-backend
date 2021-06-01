@@ -16,6 +16,7 @@ class _SignInState extends State<SignIn> {
 
   Widget signInFormulario() {
     final GlobalKey<FormState> formKey = new GlobalKey();
+    final LoginUser loginData = new LoginUser(); // evento;
     return Form(
         key: formKey,
         child: Column(children: [
@@ -28,23 +29,34 @@ class _SignInState extends State<SignIn> {
                 }
                 return null;
               },
-              onSaved: (String inValue) {},
+              onSaved: (String inValue) {
+                loginData.username = inValue;
+              },
               decoration: InputDecoration(
                   hintText: "none@none.com",
                   labelText: "Username (eMail address)")),
           TextFormField(
-              initialValue: "a",
+              initialValue: "",
               obscureText: true,
               validator: (String inValue) {
-                if (inValue.length < 10) {
+                if (inValue.length < 1) {
                   return "Password must be >=10 in length";
                 }
                 return null;
               },
-              onSaved: (String inValue) {},
+              onSaved: (String inValue) {
+                loginData.password = inValue;
+              },
               decoration:
                   InputDecoration(hintText: "Password", labelText: "Password")),
-          ElevatedButton(onPressed: () {}, child: Text("SignIn!")),
+          ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState.validate()) {
+                  formKey.currentState.save();
+                  BlocProvider.of<AuthBloc>(context).add(loginData);
+                }
+              },
+              child: Text("SignIn!")),
           ElevatedButton(
               onPressed: () {
                 BlocProvider.of<AuthBloc>(context).add(LoginAnonymousUser());

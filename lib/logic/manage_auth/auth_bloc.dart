@@ -23,8 +23,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event == null) {
       yield Unauthenticated();
+    }
+    if (event is RegisterUser) {
+      _authenticationService.createUserWithEmailAndPassword(
+          email: event.username, password: event.password);
     } else if (event is LoginAnonymousUser) {
       _authenticationService.signInAnonimo();
+    } else if (event is LoginUser) {
+      _authenticationService.signInWithEmailAndPassword(
+          email: event.username, password: event.password);
     } else if (event is InnerServerEvent) {
       if (event.userModel == null) {
         yield Unauthenticated();
