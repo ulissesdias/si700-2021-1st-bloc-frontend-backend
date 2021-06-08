@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aula09_2021/data/firebase/firebase_database.dart';
 import 'package:aula09_2021/data/local/local_database.dart';
 import 'package:aula09_2021/data/web_server/remote_database.dart';
 import 'package:aula09_2021/logic/monitor_db/monitor_db_event.dart';
@@ -10,11 +11,14 @@ import 'package:bloc/bloc.dart';
 class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
   StreamSubscription _localSubscription;
   StreamSubscription _remoteSubscription;
+  StreamSubscription _firebaseSubscription;
 
   List<Note> localNoteList;
   List<Note> remoteNoteList;
+  List<Note> firebaseNoteList;
   List<int> localIdList;
   List<int> remoteIdList;
+  List<String> firebaseIdList;
 
   MonitorBloc() : super(MonitorState(noteList: [], idList: [])) {
     add(AskNewList());
@@ -23,8 +27,12 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
         localNoteList = response[0];
         localIdList = response[1];
         add(UpdateList(
-            noteList: List.from(localNoteList)..addAll(remoteNoteList),
-            idList: List.from(localIdList)..addAll(remoteIdList)));
+            noteList: List.from(localNoteList)
+              ..addAll(remoteNoteList)
+              ..addAll(firebaseNoteList),
+            idList: List.from(localIdList)
+              ..addAll(remoteIdList)
+              ..addAll(firebaseIdList)));
       } catch (e) {}
     });
     _remoteSubscription = DatabaseRemoteServer.helper.stream.listen((response) {
@@ -32,8 +40,29 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
         remoteNoteList = response[0];
         remoteIdList = response[1];
         add(UpdateList(
-            noteList: List.from(localNoteList)..addAll(remoteNoteList),
-            idList: List.from(localIdList)..addAll(remoteIdList)));
+          noteList: List.from(localNoteList)
+            ..addAll(remoteNoteList)
+            ..addAll(firebaseNoteList),
+          idList: List.from(localIdList)
+            ..addAll(remoteIdList)
+            ..addAll(firebaseIdList),
+        ));
+      } catch (e) {}
+    });
+
+    _firebaseSubscription =
+        FirebaseRemoteServer.helper.stream.listen((response) {
+      try {
+        firebaseNoteList = response[0];
+        firebaseIdList = response[1];
+        add(UpdateList(
+          noteList: List.from(localNoteList)
+            ..addAll(remoteNoteList)
+            ..addAll(firebaseNoteList),
+          idList: List.from(localIdList)
+            ..addAll(remoteIdList)
+            ..addAll(firebaseIdList),
+        ));
       } catch (e) {}
     });
   }
@@ -43,13 +72,20 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
     if (event is AskNewList) {
       var localResponse = await DatabaseLocalServer.helper.getNoteList();
       var remoteResponse = await DatabaseRemoteServer.helper.getNoteList();
+      var firebaseResponse = await FirebaseRemoteServer.helper.getNoteList();
       localNoteList = localResponse[0];
       localIdList = localResponse[1];
       remoteNoteList = remoteResponse[0];
       remoteIdList = remoteResponse[1];
+      firebaseNoteList = firebaseResponse[0];
+      firebaseIdList = firebaseResponse[1];
       yield MonitorState(
-          noteList: List.from(localNoteList)..addAll(remoteNoteList),
-          idList: List.from(localIdList)..addAll(remoteIdList));
+          noteList: List.from(localNoteList)
+            ..addAll(remoteNoteList)
+            ..addAll(firebaseNoteList),
+          idList: List.from(localIdList)
+            ..addAll(remoteIdList)
+            ..addAll(firebaseIdList));
     } else if (event is UpdateList) {
       yield MonitorState(idList: event.idList, noteList: event.noteList);
     }
@@ -58,6 +94,7 @@ class MonitorBloc extends Bloc<MonitorEvent, MonitorState> {
   close() {
     _localSubscription.cancel();
     _remoteSubscription.cancel();
+    _firebaseSubscription.cancel();
     return super.close();
   }
 }
