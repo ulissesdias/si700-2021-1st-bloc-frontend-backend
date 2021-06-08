@@ -1,3 +1,4 @@
+import 'package:aula09_2021/data/firebase/firebase_database.dart';
 import 'package:aula09_2021/model/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -28,10 +29,14 @@ class FirebaseAuthenticationService {
     return UserModel(user.uid);
   }
 
-  createUserWithEmailAndPassword({String email, String password}) async {
+  createUserWithEmailAndPassword(
+      {String email, String password, int idade = 21}) async {
     UserCredential authResult = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
     User user = authResult.user;
+
+    // Invocação ao Firestore para inserir o usuário.
+    FirebaseRemoteServer.helper.includeUserData(user.uid, email, idade);
     return UserModel(user.uid);
   }
 

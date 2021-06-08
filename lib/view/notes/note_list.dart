@@ -1,4 +1,5 @@
 import 'package:aula09_2021/logic/manage_db/manage_db_event.dart';
+import 'package:aula09_2021/logic/manage_db/manage_firebase_db_bloc.dart';
 import 'package:aula09_2021/logic/manage_db/manage_local_db_bloc.dart';
 import 'package:aula09_2021/logic/manage_db/manage_remote_db_bloc.dart';
 import 'package:aula09_2021/logic/monitor_db/monitor_db_state.dart';
@@ -49,6 +50,10 @@ class _NoteListState extends State<NoteList> {
                 BlocProvider.of<ManageRemoteBloc>(context).add(UpdateRequest(
                     noteId: idList[position],
                     previousNote: Note.fromMap(noteList[position].toMap())));
+              } else if (noteList[position].dataLocation == 0) {
+                BlocProvider.of<ManageFirebaseBloc>(context).add(UpdateRequest(
+                    noteId: idList[position],
+                    previousNote: Note.fromMap(noteList[position].toMap())));
               }
             },
             trailing: GestureDetector(
@@ -58,6 +63,9 @@ class _NoteListState extends State<NoteList> {
                         .add(DeleteEvent(noteId: idList[position]));
                   } else if (noteList[position].dataLocation == 2) {
                     BlocProvider.of<ManageRemoteBloc>(context)
+                        .add(DeleteEvent(noteId: idList[position]));
+                  } else if (noteList[position].dataLocation == 0) {
+                    BlocProvider.of<ManageFirebaseBloc>(context)
                         .add(DeleteEvent(noteId: idList[position]));
                   }
                 },

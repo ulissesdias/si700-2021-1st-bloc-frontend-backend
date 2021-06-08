@@ -9,6 +9,10 @@ class FirebaseRemoteServer {
   final CollectionReference noteCollection =
       FirebaseFirestore.instance.collection("notes");
 
+  includeUserData(String uid, String email, int idade) async {
+    await noteCollection.doc(uid).set({"email": email, "idade": idade});
+  }
+
   List _noteListFromSnapshot(QuerySnapshot snapshot) {
     List<Note> noteList = [];
     List<String> idList = [];

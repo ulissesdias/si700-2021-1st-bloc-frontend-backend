@@ -37,7 +37,7 @@ class Note {
   }
 
   set dataLocation(int newLocation) {
-    if (newLocation > 0 && newLocation < 3) {
+    if (newLocation >= 0 && newLocation < 3) {
       this._dataLocation = newLocation;
     }
   }
