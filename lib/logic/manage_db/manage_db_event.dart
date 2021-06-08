@@ -3,12 +3,12 @@ import 'package:aula09_2021/model/note.dart';
 abstract class ManageEvent {}
 
 class DeleteEvent extends ManageEvent {
-  int noteId;
+  var noteId;
   DeleteEvent({this.noteId});
 }
 
 class UpdateRequest extends ManageEvent {
-  int noteId;
+  var noteId;
   Note previousNote;
 
   UpdateRequest({this.noteId, this.previousNote});
